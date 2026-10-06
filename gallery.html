@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <meta name="format-detection" content="telephone=no">
-  <title>Gallery — Yasmeen Khan | Hand Art Gallery</title>
+  <title>Yasmeen Khan — Hand Art Gallery</title>
   <style>
     * {
       margin: 0;
@@ -34,9 +34,11 @@
       overflow: hidden;
     }
 
-    .content-pad { padding: 28px 24px 32px; }
+    .content-pad {
+      padding: 28px 24px 32px;
+    }
 
-    /* HEADER */
+    /* ============ HEADER ============ */
     .gallery-header {
       width: 100%;
       background: linear-gradient(135deg, #FFF0E8 0%, #FFF8F2 100%);
@@ -83,7 +85,7 @@
       line-height: 1.5;
     }
 
-    /* BRAND ROW */
+    /* ============ BRAND ROW ============ */
     .brand-row {
       display: flex;
       justify-content: space-between;
@@ -120,13 +122,14 @@
       white-space: nowrap;
     }
 
-    /* GRID */
+    /* ============ GALLERY GRID (uniform frame, contain fit) ============ */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
       margin: 32px 0 40px;
     }
+
     .gallery-item {
       position: relative;
       border-radius: 20px;
@@ -135,7 +138,7 @@
       box-shadow: 0 8px 20px rgba(180, 90, 60, 0.12);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 1 / 1;          /* ← every frame is a perfect square */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -147,18 +150,23 @@
     .gallery-item img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: contain;           /* ← keeps FULL image inside frame, no cropping */
       display: block;
       background: #FFF5EE;
       transition: transform 0.4s ease;
     }
-    .gallery-item:hover img { transform: scale(1.02); }
+    .gallery-item:hover img {
+      transform: scale(1.02);
+    }
 
-    /* LIGHTBOX */
+    /* ============ LIGHTBOX ============ */
     .lightbox {
       display: none;
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: rgba(0, 0, 0, 0.92);
       z-index: 1000;
       justify-content: center;
@@ -215,7 +223,7 @@
       margin: 0 auto;
     }
 
-    /* BOOKING BAR */
+    /* ============ BOOKING BAR ============ */
     .booking-mobile {
       background: #FFF5EE;
       border-radius: 60px;
@@ -276,7 +284,7 @@
     }
     .insta-icon-small svg { width: 16px; fill: white; }
 
-    /* NAV */
+    /* ============ NAV ============ */
     .nav-mirror {
       display: flex;
       flex-wrap: wrap;
@@ -308,7 +316,7 @@
       box-shadow: 0 3px 0 #FFD1B8;
     }
 
-    /* CONTACT STRIP */
+    /* ============ CONTACT STRIP ============ */
     .contact-strip-mobile {
       display: flex;
       flex-wrap: wrap;
@@ -342,7 +350,7 @@
       white-space: nowrap;
     }
 
-    /* RESPONSIVE */
+    /* ============ RESPONSIVE ============ */
     @media (max-width: 900px) {
       .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
       .circular-image { width: 60px; height: 60px; }
@@ -382,7 +390,8 @@
 </head>
 <body>
 <div class="app-container">
-  <!-- HEADER -->
+
+  <!-- ============ HEADER ============ -->
   <div class="gallery-header">
     <div class="title-container">
       <div class="circular-image">
@@ -399,7 +408,8 @@
   </div>
 
   <div class="content-pad">
-    <!-- BRAND ROW -->
+
+    <!-- ============ BRAND ROW ============ -->
     <div class="brand-row">
       <div class="brand">
         <h2>Yasmeen Khan <span>HAND ART GALLERY</span></h2>
@@ -407,10 +417,12 @@
       <div class="gallery-badge">🎨 art in action</div>
     </div>
 
-    <!-- GRID -->
-    <div class="gallery-grid" id="galleryGrid"></div>
+    <!-- ============ GALLERY GRID (12 UNIFORM FRAMES) ============ -->
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Dynamically injected by JS -->
+    </div>
 
-    <!-- BOOKING -->
+    <!-- ============ BOOKING BAR ============ -->
     <div class="booking-mobile">
       <div class="booking-title">📅 Book your art session today</div>
       <div class="booking-actions">
@@ -424,7 +436,7 @@
       </div>
     </div>
 
-    <!-- NAV -->
+    <!-- ============ NAV ============ -->
     <div class="nav-mirror">
       <div class="nav-btn-mirror" data-page="index.html">🏠 Home</div>
       <div class="nav-btn-mirror" data-page="about.html">📖 About</div>
@@ -435,7 +447,7 @@
       <div class="nav-btn-mirror" data-page="contact.html">📍 Contact</div>
     </div>
 
-    <!-- CONTACT STRIP -->
+    <!-- ============ CONTACT STRIP ============ -->
     <div class="contact-strip-mobile">
       <div class="call-strip" id="footerCallBtn">📞 call/text 701-740-8019</div>
       <div class="address-strip">📍 Orange, CT 06477</div>
@@ -443,7 +455,7 @@
   </div>
 </div>
 
-<!-- LIGHTBOX -->
+<!-- ============ LIGHTBOX ============ -->
 <div id="lightbox" class="lightbox">
   <div class="lightbox-content">
     <span class="close-lightbox">&times;</span>
@@ -453,7 +465,7 @@
 </div>
 
 <script>
-  // ====== BUILD 12 GALLERY ITEMS (Gl1 … Gl12) ======
+  /* ============ BUILD 12 GALLERY ITEMS (Gl1 … Gl12) ============ */
   const captions = [
     "🎨 Playful Face Painting — Colorful butterfly design",
     "✨ Intricate Henna Art — Traditional bridal patterns",
@@ -478,7 +490,7 @@
     });
   }
 
-  // ====== RENDER GRID ======
+  /* ============ RENDER GRID ============ */
   const galleryGrid = document.getElementById('galleryGrid');
 
   function renderGallery() {
@@ -493,7 +505,6 @@
       el.alt = img.alt;
       el.loading = 'lazy';
       el.onerror = function () {
-        // Placeholder if the actual image is missing
         this.src = 'https://placehold.co/800x800/FFF0E8/D96C4A?text=Gl' + (index + 1);
       };
 
@@ -503,11 +514,11 @@
     });
   }
 
-  // ====== LIGHTBOX ======
-  const lightbox       = document.getElementById('lightbox');
-  const lightboxImg    = document.getElementById('lightbox-img');
-  const lightboxCap    = document.getElementById('lightbox-caption');
-  const closeBtn       = document.querySelector('.close-lightbox');
+  /* ============ LIGHTBOX ============ */
+  const lightbox    = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCap = document.getElementById('lightbox-caption');
+  const closeBtn    = document.querySelector('.close-lightbox');
 
   function openLightbox(index) {
     const img = galleryImages[index];
@@ -531,7 +542,7 @@
     if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightboxFn();
   });
 
-  // ====== PHONE BUTTONS ======
+  /* ============ PHONE BUTTONS ============ */
   ['mobileCallBtn', 'footerCallBtn'].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) el.addEventListener('click', function (e) {
@@ -540,7 +551,7 @@
     });
   });
 
-  // ====== INSTAGRAM ======
+  /* ============ INSTAGRAM ============ */
   const instaBtn = document.getElementById('mobileInstaBtn');
   if (instaBtn) {
     instaBtn.addEventListener('click', function () {
@@ -548,7 +559,7 @@
     });
   }
 
-  // ====== NAV — SAME TAB ======
+  /* ============ NAV — SAME TAB ============ */
   document.querySelectorAll('.nav-btn-mirror').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var page = this.getAttribute('data-page');
@@ -558,11 +569,11 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
-      window.location.href = page;   // ← SAME TAB, no _blank
+      window.location.href = page;
     });
   });
 
-  // ====== INIT ======
+  /* ============ INIT ============ */
   renderGallery();
 </script>
 </body>
