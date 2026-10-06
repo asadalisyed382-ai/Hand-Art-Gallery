@@ -42,7 +42,9 @@
       padding: 28px 24px 32px;
     }
 
-    /* ========== HEADER ========== */
+    /* ============================================================
+       HEADER — TITLE + TWO CIRCULAR IMAGES ON ONE ROW
+       ============================================================ */
     .gallery-header {
       width: 100%;
       background: linear-gradient(135deg, #FFF0E8 0%, #FFF8F2 100%);
@@ -50,14 +52,16 @@
       text-align: center;
       border-bottom: 1px solid #FFD1B8;
     }
+
     .title-container {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 20px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;             /* ⬅ KEY FIX: force one row on all screens */
       margin-bottom: 12px;
     }
+
     .circular-image {
       width: 80px;
       height: 80px;
@@ -67,7 +71,7 @@
       border: 3px solid #FFFFFF;
       transition: transform 0.3s ease;
       background: #FFF5EE;
-      flex-shrink: 0;
+      flex-shrink: 0;                /* ⬅ never shrink below set size */
     }
     .circular-image:hover { transform: scale(1.05); }
     .circular-image img {
@@ -76,12 +80,16 @@
       object-fit: cover;
       display: block;
     }
+
     .gallery-header h1 {
       font-size: 2.5rem;
       font-family: 'Playfair Display', serif;
       color: #4A2C2A;
       margin: 0;
+      line-height: 1.15;
+      white-space: nowrap;           /* ⬅ keep the title on one line */
     }
+
     .gallery-header p {
       font-size: 1.1rem;
       color: #7C4A3E;
@@ -90,7 +98,9 @@
       line-height: 1.5;
     }
 
-    /* ========== BRAND ROW ========== */
+    /* ============================================================
+       BRAND ROW
+       ============================================================ */
     .brand-row {
       display: flex;
       justify-content: space-between;
@@ -129,9 +139,6 @@
 
     /* ============================================================
        GALLERY GRID — UNIFORM SQUARE FRAMES
-       Every image sits in an identical 1:1 frame with a visible
-       border, soft background, and shadow. Object-fit: cover
-       ensures the entire frame is filled edge-to-edge.
        ============================================================ */
     .gallery-grid {
       display: grid;
@@ -143,11 +150,11 @@
     .gallery-item {
       position: relative;
       width: 100%;
-      aspect-ratio: 1 / 1;              /* perfect square frame */
+      aspect-ratio: 1 / 1;
       border-radius: 20px;
       overflow: hidden;
       background: #FFF5EE;
-      border: 3px solid #FFD1B8;         /* ⬅ visible frame around every image */
+      border: 3px solid #FFD1B8;
       box-shadow: 0 8px 20px rgba(180, 90, 60, 0.15);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
@@ -162,7 +169,7 @@
     .gallery-item img {
       width: 100%;
       height: 100%;
-      object-fit: cover;                 /* ⬅ fills the square frame edge-to-edge */
+      object-fit: cover;
       object-position: center;
       display: block;
       transition: transform 0.4s ease;
@@ -171,7 +178,9 @@
       transform: scale(1.05);
     }
 
-    /* ========== LIGHTBOX ========== */
+    /* ============================================================
+       LIGHTBOX
+       ============================================================ */
     .lightbox {
       display: none;
       position: fixed;
@@ -236,7 +245,9 @@
       margin: 0 auto;
     }
 
-    /* ========== BOOKING BAR ========== */
+    /* ============================================================
+       BOOKING BAR
+       ============================================================ */
     .booking-mobile {
       background: #FFF5EE;
       border-radius: 60px;
@@ -297,7 +308,9 @@
     }
     .insta-icon-small svg { width: 16px; fill: white; }
 
-    /* ========== NAV ========== */
+    /* ============================================================
+       NAV
+       ============================================================ */
     .nav-mirror {
       display: flex;
       flex-wrap: wrap;
@@ -329,7 +342,9 @@
       box-shadow: 0 3px 0 #FFD1B8;
     }
 
-    /* ========== CONTACT STRIP ========== */
+    /* ============================================================
+       CONTACT STRIP
+       ============================================================ */
     .contact-strip-mobile {
       display: flex;
       flex-wrap: wrap;
@@ -364,27 +379,54 @@
     }
 
     /* ============================================================
-       RESPONSIVE — Mobile Friendly
+       RESPONSIVE — TABLET
        ============================================================ */
     @media (max-width: 900px) {
       .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
-      .circular-image { width: 60px; height: 60px; }
-      .gallery-header h1 { font-size: 2rem; }
+
+      .gallery-header { padding: 36px 20px; }
+      .title-container { gap: 14px; }
+      .circular-image { width: 62px; height: 62px; }
+      .gallery-header h1 { font-size: 1.9rem; }
+      .gallery-header p { font-size: 1rem; }
     }
 
+    /* ============================================================
+       RESPONSIVE — MOBILE
+       KEY FIX: keep circular images + title on ONE row
+       ============================================================ */
     @media (max-width: 600px) {
       body { padding: 10px; }
       .app-container { border-radius: 28px; }
 
+      .content-pad { padding: 20px 16px 24px; }
+      .gallery-header { padding: 26px 14px 24px; }
+
+      /* Force title + images into one tight row */
+      .title-container {
+        gap: 8px;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+      }
+      .circular-image {
+        width: 42px;
+        height: 42px;
+        border-width: 2px;
+      }
+      .gallery-header h1 {
+        font-size: 1.15rem;
+        white-space: nowrap;
+        letter-spacing: -0.3px;
+      }
+      .gallery-header p {
+        font-size: 0.85rem;
+        margin-top: 10px;
+        line-height: 1.45;
+      }
+
       .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .gallery-item { border-width: 2px; border-radius: 14px; }
-
-      .content-pad { padding: 20px 16px 24px; }
-      .gallery-header { padding: 28px 18px; }
-      .title-container { gap: 10px; }
-      .circular-image { width: 44px; height: 44px; border-width: 2px; }
-      .gallery-header h1 { font-size: 1.45rem; }
-      .gallery-header p { font-size: 0.88rem; }
 
       .brand-row { flex-direction: column; align-items: flex-start; gap: 8px; }
       .brand h2 { font-size: 1.4rem; }
@@ -410,18 +452,37 @@
       .address-strip { font-size: 0.88rem; padding: 10px 20px; white-space: normal; }
     }
 
+    /* ============================================================
+       RESPONSIVE — SMALL PHONES (iPhone SE, Galaxy A series)
+       ============================================================ */
     @media (max-width: 400px) {
+      .gallery-header { padding: 22px 10px 20px; }
+      .title-container { gap: 6px; }
+      .circular-image { width: 36px; height: 36px; border-width: 2px; }
+      .gallery-header h1 {
+        font-size: 0.98rem;
+        letter-spacing: -0.4px;
+      }
+      .gallery-header p { font-size: 0.78rem; line-height: 1.4; }
+
       .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .gallery-item { border-radius: 12px; }
-      .circular-image { width: 36px; height: 36px; }
-      .gallery-header h1 { font-size: 1.25rem; }
-      .gallery-header p { font-size: 0.82rem; }
+      .gallery-item { border-radius: 12px; border-width: 2px; }
+
       .brand h2 { font-size: 1.2rem; }
       .nav-btn-mirror { padding: 6px 11px; font-size: 0.7rem; }
       .phone-btn, .insta-btn-mobile, .call-strip, .address-strip {
         font-size: 0.82rem;
         padding: 8px 14px;
       }
+    }
+
+    /* ============================================================
+       RESPONSIVE — VERY TINY (<=360px)
+       ============================================================ */
+    @media (max-width: 360px) {
+      .gallery-header h1 { font-size: 0.88rem; }
+      .circular-image { width: 32px; height: 32px; }
+      .title-container { gap: 5px; }
     }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -503,7 +564,6 @@
 <script>
   /* ============================================================
      12 IMAGES — Gl1.jpeg … Gl12.jpeg
-     Change `prefix` or `ext` if your filenames differ
      ============================================================ */
   const prefix = 'Gl';
   const ext    = '.jpeg';
