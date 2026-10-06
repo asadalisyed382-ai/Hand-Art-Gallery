@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Hand Art Gallery — Yasmeen Khan</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #FFECD2;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      box-shadow: 0 25px 40px -18px rgba(180, 90, 60, 0.25);
+      border-radius: 40px;
+      border: 1px solid #FFD1B8;
+      overflow: hidden;
+    }
+
+    .content-pad {
+      padding: 28px 24px 32px;
+    }
+
+    /* Header image / Hero section with circular images around title */
+    .gallery-header {
+      width: 100%;
+      background: linear-gradient(135deg, #FFF0E8 0%, #FFF8F2 100%);
+      padding: 48px 24px;
+      text-align: center;
+      border-bottom: 1px solid #FFD1B8;
+    }
+    .title-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .circular-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(180, 90, 60, 0.2);
+      border: 3px solid #FFFFFF;
+      transition: transform 0.3s ease;
+    }
+    .circular-image:hover {
+      transform: scale(1.05);
+    }
+    .circular-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .gallery-header h1 {
+      font-size: 2.5rem;
+      font-family: 'Playfair Display', serif;
+      color: #4A2C2A;
+      margin: 0;
+    }
+    .gallery-header p {
+      font-size: 1.1rem;
+      color: #7C4A3E;
+      max-width: 600px;
+      margin: 12px auto 0;
+      line-height: 1.5;
+    }
+
+    /* Brand row */
+    .brand-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+      border-bottom: 2px solid #FFC9AE;
+      padding-bottom: 12px;
+    }
+    .brand h2 {
+      font-size: 2rem;
+      font-weight: 500;
+      color: #4A2C2A;
+      font-family: 'Playfair Display', serif;
+      line-height: 1.2;
+    }
+    .brand span {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: #B85A3E;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: block;
+    }
+    .gallery-badge {
+      background: #FFF0E8;
+      padding: 6px 20px;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #A04028;
+      border: 1px solid #FFB38A;
+      white-space: nowrap;
+    }
+
+    /* Gallery Grid - 3 columns on desktop, images show FULL (no cropping) */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin: 32px 0 40px;
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #FFF5EE;
+      box-shadow: 0 8px 20px rgba(180, 90, 60, 0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(180, 90, 60, 0.2);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #FFF5EE;
+      transition: transform 0.4s ease;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.02);
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 90%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .lightbox-content img {
+      width: auto;
+      max-width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+    .close-lightbox {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      background: rgba(0,0,0,0.5);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .close-lightbox:hover {
+      background: #D96C4A;
+      transform: scale(1.05);
+    }
+    .lightbox-caption {
+      position: absolute;
+      bottom: -35px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: white;
+      font-size: 0.9rem;
+      background: rgba(0,0,0,0.6);
+      padding: 8px;
+      border-radius: 30px;
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    /* Booking bar */
+    .booking-mobile {
+      background: #FFF5EE;
+      border-radius: 60px;
+      padding: 18px 24px;
+      margin: 20px 0 20px;
+      border: 1px solid #FFB38A;
+      box-shadow: 0 5px 0 #FFE0CE;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .booking-title {
+      font-size: 1.3rem;
+      font-weight: 500;
+      font-family: 'Playfair Display', serif;
+      color: #8A3B2A;
+    }
+    .booking-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .phone-btn {
+      background: white;
+      padding: 10px 24px;
+      border-radius: 60px;
+      font-weight: 500;
+      border: 1px solid #FF9E73;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform 0.05s ease;
+    }
+    .phone-btn:active {
+      transform: translateY(1px);
+    }
+    .insta-btn-mobile {
+      background: #FFF0E8;
+      padding: 8px 20px;
+      border-radius: 60px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      border: 1px solid #FFB38A;
+      font-weight: 500;
+      transition: transform 0.05s ease;
+    }
+    .insta-btn-mobile:active {
+      transform: translateY(1px);
+    }
+    .insta-icon-small {
+      width: 28px;
+      height: 28px;
+      background: radial-gradient(circle at 30% 30%, #FFB347, #FF6B35);
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .insta-icon-small svg {
+      width: 16px;
+      fill: white;
+    }
+
+    /* Navigation */
+    .nav-mirror {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0 16px;
+      justify-content: flex-start;
+    }
+    .nav-btn-mirror {
+      background: #FFFFFF;
+      border: 1px solid #FFB38A;
+      border-radius: 40px;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #5E3A34;
+      box-shadow: 0 3px 0 #FFE0CE;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.05s ease;
+    }
+    .nav-btn-mirror:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 0 #FFE0CE;
+    }
+    .nav-btn-mirror.active {
+      background: #FFF0E8;
+      border-color: #FF8A5C;
+      color: #A04028;
+      box-shadow: 0 3px 0 #FFD1B8;
+    }
+
+    /* Contact strip */
+    .contact-strip-mobile {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .call-strip {
+      background: #FFF5EE;
+      border-radius: 60px;
+      padding: 12px 24px;
+      font-weight: 500;
+      border: 1px solid #FFB38A;
+      cursor: pointer;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.05s ease;
+      white-space: nowrap;
+    }
+    .call-strip:active {
+      transform: translateY(1px);
+    }
+    .address-strip {
+      background: #FFF0E8;
+      border-radius: 60px;
+      padding: 12px 24px;
+      text-align: center;
+      font-weight: 500;
+      border: 1px solid #FFB38A;
+      font-size: 1rem;
+      flex: 1;
+      white-space: nowrap;
+    }
+
+    /* Responsive - Tablet */
+    @media (max-width: 900px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      .circular-image {
+        width: 60px;
+        height: 60px;
+      }
+      .gallery-header h1 {
+        font-size: 2rem;
+      }
+    }
+
+    /* Responsive - Mobile */
+    @media (max-width: 600px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+      .content-pad {
+        padding: 20px 18px 28px;
+      }
+      .gallery-header {
+        padding: 32px 20px;
+      }
+      .title-container {
+        gap: 12px;
+      }
+      .circular-image {
+        width: 45px;
+        height: 45px;
+      }
+      .gallery-header h1 {
+        font-size: 1.5rem;
+      }
+      .gallery-header p {
+        font-size: 0.9rem;
+      }
+      .brand h2 {
+        font-size: 1.5rem;
+      }
+      .brand span {
+        font-size: 0.7rem;
+      }
+      .gallery-badge {
+        font-size: 0.7rem;
+        padding: 4px 12px;
+      }
+      .booking-mobile {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+      .booking-actions {
+        justify-content: center;
+      }
+      .nav-mirror {
+        justify-content: center;
+      }
+      .nav-btn-mirror {
+        padding: 6px 14px;
+        font-size: 0.75rem;
+      }
+      .contact-strip-mobile {
+        flex-direction: column;
+      }
+      .call-strip {
+        justify-content: center;
+        white-space: nowrap;
+      }
+      .address-strip {
+        white-space: nowrap;
+        overflow-x: auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .circular-image {
+        width: 38px;
+        height: 38px;
+      }
+      .gallery-header h1 {
+        font-size: 1.3rem;
+      }
+      .booking-title {
+        font-size: 1.1rem;
+      }
+      .phone-btn, .insta-btn-mobile, .call-strip, .address-strip {
+        font-size: 0.85rem;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="app-container">
+  <!-- Gallery Header with circular images Gl1 and Gl12 around the title -->
+  <div class="gallery-header">
+    <div class="title-container">
+      <div class="circular-image">
+        <img src="image/Gl1.jpeg" alt="Gallery Decoration Left" onerror="this.src='https://placehold.co/80x80/FFF0E8/D96C4A?text=🎨'">
+      </div>
+      <h1>Yasmeen's Artistry Gallery</h1>
+      <div class="circular-image">
+        <img src="image/Gl12.jpeg" alt="Gallery Decoration Right" onerror="this.src='https://placehold.co/80x80/FFF0E8/D96C4A?text=🎨'">
+      </div>
+    </div>
+    <p>Explore Yasmeen Khan's vibrant hand art — from playful face painting and intricate henna designs to colorful creative expressions. Every piece tells a story of joy, culture, and craftsmanship.</p>
+  </div>
+
+  <div class="content-pad">
+    <!-- Brand row -->
+    <div class="brand-row">
+      <div class="brand">
+        <h2>Yasmeen Khan <span>HAND ART GALLERY</span></h2>
+      </div>
+      <div class="gallery-badge">🎨 art in action</div>
+    </div>
+
+    <!-- Gallery Grid - 12 images only (Gl1 to Gl12) - Gl1 and Gl12 also used as decorative circles -->
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Images will be dynamically injected via JavaScript -->
+    </div>
+
+    <!-- Booking Bar -->
+    <div class="booking-mobile">
+      <div class="booking-title">📅 Book your art session today</div>
+      <div class="booking-actions">
+        <div class="phone-btn" id="mobileCallBtn">📞 701-740-8019</div>
+        <div class="insta-btn-mobile" id="mobileInstaBtn">
+          <div class="insta-icon-small">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.309.975.975 1.247 2.242 1.309 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.309 3.608-.975.975-2.242 1.247-3.608 1.309-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.309-.975-.975-1.247-2.242-1.309-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.334-2.633 1.309-3.608.975-.975 2.242-1.247 3.608-1.309 1.266-.058 1.646-.07 4.85-.07zM12 0C8.741 0 8.332.014 7.052.072 5.197.157 3.648.64 2.365 1.923 1.082 3.206.6 4.755.515 6.61.457 7.89.443 8.299.443 12s.014 4.108.072 5.39c.085 1.855.568 3.404 1.85 4.687 1.283 1.283 2.832 1.765 4.687 1.85 1.28.058 1.689.072 5.39.072 3.702 0 4.11-.014 5.39-.072 1.855-.085 3.404-.568 4.687-1.85 1.283-1.283 1.765-2.832 1.85-4.687.058-1.282.072-1.69.072-5.39 0-3.702-.014-4.11-.072-5.39-.085-1.855-.568-3.404-1.85-4.687C20.797.64 19.248.157 17.392.072 16.11.014 15.702 0 12 0z"/></svg>
+          </div>
+          <span>@Yasmeen_henna786</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-mirror">
+      <div class="nav-btn-mirror" data-nav="home">🏠 Home</div>
+      <div class="nav-btn-mirror" data-nav="about">📖 About</div>
+      <div class="nav-btn-mirror" data-nav="services">✂️ Services</div>
+      <div class="nav-btn-mirror" data-nav="facepainting">🎨 Face Painting</div>
+      <div class="nav-btn-mirror" data-nav="team">👥 Team</div>
+      <div class="nav-btn-mirror active" data-nav="gallery">📸 Gallery</div>
+      <div class="nav-btn-mirror" data-nav="contact">📍 Contact</div>
+    </div>
+
+    <!-- Contact Strip -->
+    <div class="contact-strip-mobile">
+      <div class="call-strip" id="footerCallBtn">📞 call/text 701-740-8019</div>
+      <div class="address-strip">📍 Orange, CT 06477</div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div id="lightbox" class="lightbox">
+  <div class="lightbox-content">
+    <span class="close-lightbox">&times;</span>
+    <img id="lightbox-img" src="" alt="Gallery Image">
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+</div>
+
+<script>
+  // Generate 12 images from Gl1.jpeg to Gl12.jpeg
+  const galleryImages = [];
+  const captions = [
+    "🎨 Playful Face Painting — Colorful butterfly design",
+    "✨ Intricate Henna Art — Traditional bridal patterns",
+    "🦋 Butterfly Whimsy — Delicate cheek art",
+    "🌟 Superhero Mask — Bold and brave design",
+    "🌸 Floral Elegance — Soft and romantic henna",
+    "🐯 Tiger Spirit — Fierce face painting",
+    "👑 Princess Crown — Regal and sparkling",
+    "🌿 Natural Henna — Organic and beautiful",
+    "🦄 Unicorn Magic — Whimsical and dreamy",
+    "🎭 Festival Art — Celebration-ready designs",
+    "💫 Glitter Accents — Sparkling finishing touches",
+    "🎨 Creative Expression — Custom art for every occasion"
+  ];
+  
+  // Create images for Gl1 through Gl12
+  for (let i = 1; i <= 12; i++) {
+    galleryImages.push({
+      src: `image/Gl${i}.jpeg`,
+      alt: `Yasmeen Khan Hand Art - Gallery Image ${i}`,
+      caption: captions[i-1] || `🎨 Yasmeen's signature work — creation ${i} 🎨`
+    });
+  }
+
+  // Render gallery grid
+  const galleryGrid = document.getElementById('galleryGrid');
+  
+  function renderGallery() {
+    galleryGrid.innerHTML = '';
+    galleryImages.forEach((img, index) => {
+      const galleryItem = document.createElement('div');
+      galleryItem.className = 'gallery-item';
+      galleryItem.setAttribute('data-index', index);
+      
+      const imgElement = document.createElement('img');
+      imgElement.src = img.src;
+      imgElement.alt = img.alt;
+      imgElement.loading = 'lazy';
+      imgElement.onerror = function() {
+        this.src = 'https://placehold.co/800x800/FFF0E8/D96C4A?text=Image+Not+Found';
+      };
+      
+      galleryItem.appendChild(imgElement);
+      galleryItem.addEventListener('click', () => openLightbox(index));
+      galleryGrid.appendChild(galleryItem);
+    });
+  }
+
+  // Lightbox functionality
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCaption = document.getElementById('lightbox-caption');
+  const closeLightbox = document.querySelector('.close-lightbox');
+  
+  function openLightbox(index) {
+    const img = galleryImages[index];
+    lightboxImg.src = img.src;
+    lightboxCaption.textContent = img.caption;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeLightboxFn() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+    lightboxImg.src = '';
+  }
+  
+  closeLightbox.addEventListener('click', closeLightboxFn);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) {
+      closeLightboxFn();
+    }
+  });
+  
+  // Keyboard escape to close lightbox
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+      closeLightboxFn();
+    }
+  });
+  
+  // Phone call functionality
+  const callButtons = document.querySelectorAll('#mobileCallBtn, #footerCallBtn, .phone-btn, .call-strip');
+  callButtons.forEach(btn => {
+    if(btn) btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.location.href = 'tel:7017408019';
+    });
+  });
+  
+  // Instagram click
+  const instaMobile = document.getElementById('mobileInstaBtn');
+  if(instaMobile) {
+    instaMobile.addEventListener('click', () => {
+      window.open('https://www.instagram.com/Yasmeen_henna786', '_blank');
+    });
+  }
+  
+  // Navigation handlers - now using same page / window.open for external files
+  const navButtons = document.querySelectorAll('.nav-btn-mirror');
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const buttonText = btn.innerText.toLowerCase().trim();
+      
+      if (buttonText.includes('home')) {
+        alert('✨ Welcome to Yasmeen Khan\'s Hand Art Gallery! ✨');
+      } else if (buttonText.includes('about')) {
+        alert('📖 Yasmeen Khan — Hand Art Artist\n\nYasmeen is a passionate artist specializing in face painting and henna art. Based in Orange, CT, she brings joy to events across the region.\n\nWith years of experience and a keen eye for detail, Yasmeen creates custom designs that delight children and adults alike.');
+      } else if (buttonText.includes('services')) {
+        window.open('services.html', '_blank');
+      } else if (buttonText.includes('face painting') || buttonText.includes('facepainting')) {
+        window.open('facepainting.html', '_blank');
+      } else if (buttonText.includes('team')) {
+        window.open('team.html', '_blank');
+      } else if (buttonText.includes('gallery')) {
+        alert('📸 You\'re on the Gallery page — enjoy Yasmeen\'s artistry!');
+      } else if (buttonText.includes('contact')) {
+        alert('📍 Orange, CT 06477\n📞 701-740-8019\n📧 yasmeennabab@gmail.com\n📱 FB: Yasmeennabab\n📷 Insta: Yasmeen_henna786\n\nCall or text to book your appointment!');
+      }
+    });
+  });
+  
+  // Initialize gallery
+  renderGallery();
+</script>
+</body>
+</html>
