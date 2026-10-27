@@ -58,7 +58,7 @@
       align-items: center;
       justify-content: center;
       gap: 20px;
-      flex-wrap: nowrap;             /* ⬅ KEY FIX: force one row on all screens */
+      flex-wrap: nowrap;
       margin-bottom: 12px;
     }
 
@@ -71,7 +71,7 @@
       border: 3px solid #FFFFFF;
       transition: transform 0.3s ease;
       background: #FFF5EE;
-      flex-shrink: 0;                /* ⬅ never shrink below set size */
+      flex-shrink: 0;
     }
     .circular-image:hover { transform: scale(1.05); }
     .circular-image img {
@@ -87,7 +87,7 @@
       color: #4A2C2A;
       margin: 0;
       line-height: 1.15;
-      white-space: nowrap;           /* ⬅ keep the title on one line */
+      white-space: nowrap;
     }
 
     .gallery-header p {
@@ -179,7 +179,7 @@
     }
 
     /* ============================================================
-       LIGHTBOX
+       LIGHTBOX (UPDATED: No caption text)
        ============================================================ */
     .lightbox {
       display: none;
@@ -208,7 +208,7 @@
     .lightbox-content img {
       width: auto;
       max-width: 100%;
-      max-height: 80vh;
+      max-height: 85vh;
       object-fit: contain;
       border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.3);
@@ -230,20 +230,6 @@
       transition: all 0.2s;
     }
     .close-lightbox:hover { background: #D96C4A; transform: scale(1.05); }
-    .lightbox-caption {
-      position: absolute;
-      bottom: -35px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      color: white;
-      font-size: 0.9rem;
-      background: rgba(0,0,0,0.6);
-      padding: 8px;
-      border-radius: 30px;
-      width: fit-content;
-      margin: 0 auto;
-    }
 
     /* ============================================================
        BOOKING BAR
@@ -393,7 +379,6 @@
 
     /* ============================================================
        RESPONSIVE — MOBILE
-       KEY FIX: keep circular images + title on ONE row
        ============================================================ */
     @media (max-width: 600px) {
       body { padding: 10px; }
@@ -402,7 +387,6 @@
       .content-pad { padding: 20px 16px 24px; }
       .gallery-header { padding: 26px 14px 24px; }
 
-      /* Force title + images into one tight row */
       .title-container {
         gap: 8px;
         flex-wrap: nowrap;
@@ -538,8 +522,6 @@
       <div class="nav-btn-mirror" data-page="index.html">🏠 Home</div>
       <div class="nav-btn-mirror" data-page="about.html">📖 About</div>
       <div class="nav-btn-mirror" data-page="services.html">✂️ Services</div>
-      <div class="nav-btn-mirror" data-page="facepainting.html">🎨 Face Painting</div>
-      <div class="nav-btn-mirror" data-page="team.html">👥 Team</div>
       <div class="nav-btn-mirror active" data-page="gallery.html">📸 Gallery</div>
       <div class="nav-btn-mirror" data-page="contact.html">📍 Contact</div>
     </div>
@@ -552,12 +534,11 @@
   </div>
 </div>
 
-<!-- LIGHTBOX -->
+<!-- LIGHTBOX (UPDATED: removed caption element) -->
 <div id="lightbox" class="lightbox">
   <div class="lightbox-content">
     <span class="close-lightbox">&times;</span>
     <img id="lightbox-img" src="" alt="Gallery Image">
-    <div class="lightbox-caption" id="lightbox-caption"></div>
   </div>
 </div>
 
@@ -568,27 +549,11 @@
   const prefix = 'Gl';
   const ext    = '.jpeg';
 
-  const captions = [
-    "🎨 Playful Face Painting — Colorful butterfly design",
-    "✨ Intricate Henna Art — Traditional bridal patterns",
-    "🦋 Butterfly Whimsy — Delicate cheek art",
-    "🌟 Superhero Mask — Bold and brave design",
-    "🌸 Floral Elegance — Soft and romantic henna",
-    "🐯 Tiger Spirit — Fierce face painting",
-    "👑 Princess Crown — Regal and sparkling",
-    "🌿 Natural Henna — Organic and beautiful",
-    "🦄 Unicorn Magic — Whimsical and dreamy",
-    "🎭 Festival Art — Celebration-ready designs",
-    "💫 Glitter Accents — Sparkling finishing touches",
-    "🎨 Creative Expression — Custom art for every occasion"
-  ];
-
   const galleryImages = [];
   for (let i = 1; i <= 12; i++) {
     galleryImages.push({
       src: `image/${prefix}${i}${ext}`,
-      alt: `Yasmeen Khan Hand Art - Gallery Image ${i}`,
-      caption: captions[i - 1] || `🎨 Yasmeen's signature work — creation ${i} 🎨`
+      alt: `Yasmeen Khan Hand Art - Gallery Image ${i}`
     });
   }
 
@@ -616,16 +581,14 @@
     });
   }
 
-  /* ============ LIGHTBOX ============ */
+  /* ============ LIGHTBOX (UPDATED: no caption logic) ============ */
   const lightbox    = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
-  const lightboxCap = document.getElementById('lightbox-caption');
   const closeBtn    = document.querySelector('.close-lightbox');
 
   function openLightbox(index) {
     const img = galleryImages[index];
     lightboxImg.src = img.src;
-    lightboxCap.textContent = img.caption;
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
