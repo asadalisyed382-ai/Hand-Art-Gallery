@@ -1,1 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <meta name="format-detection" content="telephone=no">
+  <title>Services — Hand Art Gallery</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      margin: 0;
+      background: #FFECD2;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    .kiosk {
+      max-width: 1100px;
+      width: 100%;
+      background: #FFFFFF;
+      border-radius: 40px;
+      box-shadow: 0 25px 40px -18px rgba(180, 90, 60, 0.25);
+      border: 1px solid #FFD1B8;
+      padding: 24px 20px;
+    }
+    
+    .mirror-container {
+      display: flex;
+      flex-direction: row;
+      gap: 28px;
+      align-items: center;
+    }
+    
+    /* ============================================================
+       IMAGE FRAME — Picture Frame around Yasmeen's Photo
+       ============================================================ */
+    .video-mirror {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .video-wrapper {
+      width: 100%;
+      max-width: 380px;
+      border-radius: 32px;
+      overflow: hidden;
+      box-shadow: 0 20px 28px -12px rgba(200, 100, 70, 0.3);
+      border: 8px solid #FFFFFF; /* Thick white picture frame */
+      outline: 2px solid #FFD1B8; /* Soft peach outline */
+      background: #FFF5EE;
+      aspect-ratio: 3 / 4;
+      position: relative;
+    }
+    
+    .video-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
+    .video-wrapper::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+      pointer-events: none;
+    }
+    
+    .content-side {
+      flex: 1.2;
+      min-width: 0;
+    }
+    
+    .brand-main h1 {
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 1.1;
+      color: #4A2C2A;
+      font-family: 'Playfair Display', serif;
+      text-shadow: 2px 2px 0 #FFE6D9;
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+    
+    .hair-art {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: #D96C4A;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 4px;
+      font-family: 'Inter', sans-serif;
+      word-break: break-word;
+    }
+    
+    .tagline-mirror {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #B85A3E;
+      background: #FFF0E8;
+      display: inline-block;
+      padding: 0.35rem 1.2rem;
+      border-radius: 40px;
+      letter-spacing: 1px;
+      margin: 14px 0 10px;
+      border: 1px solid #FFC9AE;
+      text-transform: uppercase;
+    }
+    
+    .dreams-mirror {
+      font-size: 2.2rem;
+      font-weight: 450;
+      line-height: 1.2;
+      color: #5E302B;
+      margin: 12px 0 14px;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      border-bottom: 2px solid #FFC9AE;
+      padding-bottom: 12px;
+    }
+    
+    /* ============================================================
+       SERVICES CONTENT BOX
+       ============================================================ */
+    .about-story {
+      background: #FFF8F2;
+      border-radius: 20px;
+      padding: 24px;
+      border-left: 6px solid #FFA373;
+      margin: 20px 0;
+    }
+
+    .story-headline {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #7C4A3E;
+      margin-bottom: 12px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .story-text {
+      line-height: 1.6;
+      color: #4F342E;
+      font-size: 0.95rem;
+    }
+
+    .story-text p {
+      margin-bottom: 1rem;
+    }
+
+    .story-text ul {
+      margin-left: 20px;
+      margin-bottom: 1rem;
+    }
+
+    .story-text li {
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight {
+      background: #FFF0E8;
+      display: inline-block;
+      padding: 0.1rem 0.5rem;
+      border-radius: 12px;
+      font-weight: 500;
+      color: #B85A3E;
+    }
+    
+    .booking-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      background: #FFF5EE;
+      border-radius: 60px;
+      padding: 16px 20px;
+      margin: 20px 0 18px;
+      border: 1px solid #FFB38A;
+      box-shadow: 0 5px 0 #FFE0CE;
+    }
+    
+    .booking-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      flex: 1;
+    }
+    
+    .booking-text {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #8A3B2A;
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .call-chip {
+      background: #FFFFFF;
+      color: #B85A3E;
+      font-size: 1.1rem;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 40px;
+      border: 1px solid #FF9E73;
+      box-shadow: 0 3px 0 #FFE0CE;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 0.05s ease;
+      white-space: nowrap;
+    }
+    
+    .call-chip:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 0 #FFE0CE;
+    }
+    
+    .instagram-mirror {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 12px 0 14px;
+      padding: 8px 18px;
+      background: #FFF5EE;
+      border-radius: 50px;
+      border: 1px solid #FFB38A;
+      width: fit-content;
+      box-shadow: 0 3px 0 #FFE0CE;
+      cursor: pointer;
+      transition: transform 0.05s ease;
+    }
+    
+    .instagram-mirror:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 0 #FFE0CE;
+    }
+    
+    .instagram-icon-small {
+      width: 32px;
+      height: 32px;
+      background: radial-gradient(circle at 30% 30%, #FFB347, #FF6B35);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .instagram-icon-small svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+    
+    .instagram-handle-mirror {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #7A3B2A;
+      background: #FFFFFFD0;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      border: 1px solid #FF9E73;
+      white-space: nowrap;
+    }
+    
+    .nav-mirror {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0 16px;
+      justify-content: flex-start;
+    }
+    
+    .nav-btn-mirror {
+      background: #FFFFFF;
+      border: 1px solid #FFB38A;
+      border-radius: 40px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #5E3A34;
+      box-shadow: 0 3px 0 #FFE0CE;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.05s ease;
+    }
+    
+    .nav-btn-mirror:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 0 #FFE0CE;
+    }
+    
+    .nav-btn-mirror.active {
+      background: #FFF0E8;
+      border-color: #FF8A5C;
+      color: #A04028;
+      box-shadow: 0 3px 0 #FFD1B8;
+    }
+    
+    .bottom-mirror {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    
+    .call-text-phone {
+      background: #FFF5EE;
+      border-radius: 60px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #5E3A34;
+      border: 1px solid #FFB38A;
+      box-shadow: 0 4px 0 #FFE0CE;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 0.05s ease;
+      white-space: nowrap;
+    }
+    
+    .call-text-phone:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 0 #FFE0CE;
+    }
+    
+    .address-mirror {
+      background: #FFF5EE;
+      border-radius: 60px;
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #6A3A2E;
+      border: 1px solid #FFB38A;
+      box-shadow: 0 4px 0 #FFE0CE;
+      text-align: center;
+      flex: 1;
+      min-width: 240px;
+    }
+    
+    /* ========== MOBILE FRIENDLY RESPONSIVE ========== */
+    @media (max-width: 850px) {
+      .mirror-container { flex-direction: column; }
+      .video-wrapper { max-width: 320px; margin: 0 auto; }
+      .dreams-mirror { font-size: 1.9rem; }
+      .brand-main h1 { font-size: 2.5rem; }
+      .hair-art { font-size: 1.3rem; }
+      .booking-row { flex-direction: column; align-items: stretch; }
+      .booking-left { justify-content: center; }
+      .nav-mirror { justify-content: center; }
+      .bottom-mirror { flex-direction: column; }
+      .call-text-phone { width: 100%; justify-content: center; white-space: normal; }
+      .address-mirror { width: 100%; white-space: normal; word-break: break-word; }
+      .instagram-mirror { width: 100%; justify-content: center; }
+      .content-side { text-align: center; }
+      .tagline-mirror { margin: 14px auto 10px; }
+      .about-story { text-align: left; }
+    }
+    
+    @media (max-width: 550px) {
+      .kiosk { padding: 18px 16px; }
+      .brand-main h1 { font-size: 2.2rem; }
+      .hair-art { font-size: 1.1rem; letter-spacing: 0.08em; }
+      .dreams-mirror { font-size: 1.6rem; }
+      .booking-text { font-size: 1.2rem; }
+      .call-chip { font-size: 1rem; padding: 8px 16px; }
+      .nav-btn-mirror { padding: 6px 14px; font-size: 0.75rem; }
+      .instagram-handle-mirror { font-size: 0.9rem; }
+      .about-story { padding: 18px; }
+    }
+    
+    @media (max-width: 400px) {
+      .nav-mirror { gap: 8px; }
+      .nav-btn-mirror { padding: 6px 12px; font-size: 0.7rem; }
+      .booking-text { font-size: 1.1rem; }
+      .call-chip { font-size: 0.9rem; padding: 6px 14px; }
+      .video-wrapper { border-width: 6px; border-radius: 24px; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="kiosk">
+    <div class="mirror-container">
+      
+      <!-- IMAGE SECTION WITH PICTURE FRAME -->
+      <div class="video-mirror">
+        <div class="video-wrapper">
+          <img src="Yasmeen.jpeg" alt="Yasmeen Khan - Hand Art Artist" onerror="this.src='https://placehold.co/400x533/FFF5EE/D96C4A?text=Yasmeen+Khan'">
+        </div>
+      </div>
+
+      <!-- CONTENT SECTION -->
+      <div class="content-side">
+        <div class="brand-main">
+          <h1>Our Services</h1>
+          <div class="hair-art">HAND ART GALLERY</div>
+        </div>
+        
+        <div class="tagline-mirror">ARTIST: YASMEEN KHAN</div>
+        <div class="dreams-mirror">Art for every occasion</div>
+
+        <!-- SERVICES INFO (Taken from About page bio) -->
+        <div class="about-story">
+          <div class="story-headline">🎨 What We Offer</div>
+          <div class="story-text">
+            <p>With over a <strong>decade of experience</strong>, Yasmeen Khan brings vibrant colors and cultural beauty to your special events. Every design is crafted with precision, love, and a deep appreciation for artistry.</p>
+            
+            <ul>
+              <li><strong>Face Painting:</strong> Transforming faces into magical creatures, superheroes, and beautiful works of art for kids and adults alike.</li>
+              <li><strong>Indian Henna (Mehndi):</strong> Traditional, intricate designs applied to hands and various other parts of the body.</li>
+              <li><strong>Kids' Birthday Parties:</strong> Bringing joy, excitement, and unforgettable smiles to birthday celebrations.</li>
+              <li><strong>Weddings & Fairs:</strong> Adding elegance to weddings and vibrant energy to community festivals and fairs.</li>
+            </ul>
+            
+            <p>Whatever the occasion, let us add a splash of color and tradition to your next event!</p>
+          </div>
+        </div>
+
+        <!-- BOOKING / CONTACT -->
+        <div class="booking-row">
+          <div class="booking-left">
+            <span class="booking-text">Book your app today</span>
+            <span class="call-chip" id="callBtn1">📞 701-740-8019</span>
+          </div>
+        </div>
+
+        <div class="instagram-mirror" id="instaBtn">
+          <div class="instagram-icon-small">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.309.975.975 1.247 2.242 1.309 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.309 3.608-.975.975-2.242 1.247-3.608 1.309-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.309-.975-.975-1.247-2.242-1.309-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.334-2.633 1.309-3.608.975-.975 2.242-1.247 3.608-1.309 1.266-.058 1.646-.07 4.85-.07zM12 0C8.741 0 8.332.014 7.052.072 5.197.157 3.648.64 2.365 1.923 1.082 3.206.6 4.755.515 6.61.457 7.89.443 8.299.443 12s.014 4.108.072 5.39c.085 1.855.568 3.404 1.85 4.687 1.283 1.283 2.832 1.765 4.687 1.85 1.28.058 1.689.072 5.39.072 3.702 0 4.11-.014 5.39-.072 1.855-.085 3.404-.568 4.687-1.85 1.283-1.283 1.765-2.832 1.85-4.687.058-1.282.072-1.69.072-5.39 0-3.702-.014-4.11-.072-5.39-.085-1.855-.568-3.404-1.85-4.687C20.797.64 19.248.157 17.392.072 16.11.014 15.702 0 12 0z"/>
+            </svg>
+          </div>
+          <span class="instagram-handle-mirror">@Yasmeen_henna786</span>
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="nav-mirror">
+          <div class="nav-btn-mirror" data-page="index.html">🏠 Home</div>
+          <div class="nav-btn-mirror" data-page="about.html">📖 About</div>
+          <div class="nav-btn-mirror active" data-page="services.html">✂️ Services</div>
+          <div class="nav-btn-mirror" data-page="gallery.html">📸 Gallery</div>
+          <div class="nav-btn-mirror" data-page="contact.html">📍 Contact</div>
+        </div>
+
+        <!-- BOTTOM STRIP -->
+        <div class="bottom-mirror">
+          <div class="call-text-phone" id="callBtn2">📞 call/text 701-740-8019</div>
+          <div class="address-mirror">📍 Orange, CT 06477</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Instagram click
+    document.getElementById('instaBtn').addEventListener('click', function() {
+      window.open('https://www.instagram.com/Yasmeen_henna786', '_blank');
+    });
+    
+    // Phone click
+    ['callBtn1', 'callBtn2'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('click', function(e) {
+        e.stopPropagation();
+        window.location.href = 'tel:7017408019';
+      });
+    });
+    
+    // Navigation mapping — Same-tab
+    document.querySelectorAll('.nav-btn-mirror').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var page = this.getAttribute('data-page');
+        if (!page) return;
+        
+        // If clicking the current page, just scroll to top
+        var current = window.location.pathname.split('/').pop() || 'index.html';
+        if (page === current) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+        
+        window.location.href = page;
+      });
+    });
+  </script>
+</body>
+</html>
